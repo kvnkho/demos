@@ -12,6 +12,7 @@ coiled.create_notebook(
     description="Analyzes dataset with Fugue",
 )
 
+# Create a software environment for our workers
 coiled.create_software_environment(
     name="fugue-sql",
     conda={"channels": ["conda-forge"],
