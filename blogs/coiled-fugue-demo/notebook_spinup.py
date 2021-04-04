@@ -11,3 +11,9 @@ coiled.create_notebook(
     files=["fugue-sql-demo.ipynb"],
     description="Analyzes dataset with Fugue",
 )
+
+coiled.create_software_environment(
+    name="fugue-sql",
+    conda={"channels": ["conda-forge"],
+            "dependencies": ["dask","python=3.7.9","s3fs"]
+    })
