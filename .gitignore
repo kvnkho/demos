@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 # Dask worker space
-dask-worker-space/*
+dask-worker-space/
