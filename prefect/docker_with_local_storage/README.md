@@ -6,7 +6,7 @@ The `setup.py` is to make this a module so that I can import the components. I w
 
 Steps
 
-1. Build the Docker image with `docker build -t test:latest`
+1. Build the Docker image with `docker build . -t test:latest`
 2. Register the flow with `python workflow/flow.py`
 3. Start your agent with `prefect agent docker start`
 4. Run the flow with a `Quick Run` from the UI
