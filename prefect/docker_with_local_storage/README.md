@@ -1,8 +1,8 @@
 This is an example of how to run the setup for Docker RunConfig + Local Storage.
 
-The steps inside are environment.yml are unrelated to the flow. They are there for demo purposes. The flow import from the component directory.
+The steps inside are `environment.yml` are unrelated to the flow. They are there for demo purposes. The flow imports from the component directory.
 
-The setup.py is to make this a module so that I can import the components. I was able to run my flow without installing the module in the Docker image...but this surprises me and I suggest adding a line in the Dockerfile to `pip install -e .`.
+The `setup.py` is to make this a module so that I can import the components. I was able to run my flow without installing the module in the Docker image...but this surprises me and I suggest adding a line in the Dockerfile to `pip install -e .` to install your module in the Docker image.
 
 Steps
 
