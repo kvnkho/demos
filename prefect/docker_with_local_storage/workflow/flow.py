@@ -12,7 +12,7 @@ def test_task():
     x = ComponentA(2)
     y = ComponentB(2)
     x = x.n + y.n
-    logger.info(f"Test {x}!")  # Should return "Test 4"
+    logger.info(f"Test {x}!")  # Should return 4
     return
 
 with Flow("docker_example", storage=Local(path="/app/workflow/flow.py",stored_as_script=True), run_config=DockerRun(image="test:latest")) as flow:
