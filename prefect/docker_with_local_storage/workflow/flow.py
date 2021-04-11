@@ -19,4 +19,6 @@ with Flow("docker_example", storage=Local(path="/app/workflow/flow.py",stored_as
     test_task()
 
 flow.register("tutorial")
+
+# Uncomment for local testing
 # flow.run()
