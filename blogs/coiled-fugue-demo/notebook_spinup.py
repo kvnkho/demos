@@ -16,5 +16,6 @@ coiled.create_notebook(
 coiled.create_software_environment(
     name="fugue-sql",
     conda={"channels": ["conda-forge"],
-            "dependencies": ["dask=2021.04.0","distributed=2021.04.0","python=3.7.9","s3fs"]
-    })
+            "dependencies": ["dask=2021.04.0","distributed=2021.04.0","python=3.7.9","s3fs"]},
+    pip=['fugue']
+    )
