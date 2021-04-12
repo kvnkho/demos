@@ -4,8 +4,8 @@ import coiled
 # Other dependencies are needed for parsing SQL
 coiled.create_notebook(
     name="fugue-sql-demo",
-    conda={"channels": ["conda-forge"], "dependencies": ["python=3.7.9", "dask", "gcc_linux-64", "ciso8601"]},
-    pip=['fugue'],
+    conda={"channels": ["conda-forge"], "dependencies": ["python=3.7.9", "dask=2021.04.0", "gcc_linux-64", "ciso8601"]},
+    pip=["fugue", "seaborn", "matplotlib", "coiled"],
     cpu=4,
     memory="16 GiB",
     files=["fugue-sql-demo.ipynb"],
