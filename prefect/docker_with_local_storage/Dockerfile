@@ -24,3 +24,5 @@ RUN conda env create -f environment.yml && \
 ENV PATH ${CONDA_DIR}/envs/melqart/bin:$PATH
 
 ADD . .
+
+RUN pip install -e .
