@@ -5,7 +5,7 @@ import coiled
 coiled.create_notebook(
     name="fugue-sql-demo",
     conda={"channels": ["conda-forge"], "dependencies": ["python=3.7.9", "dask=2021.04.0", "gcc_linux-64", "ciso8601"]},
-    pip=["fugue", "seaborn", "matplotlib", "coiled"],
+    pip=["fugue==0.5.2", "seaborn", "matplotlib", "coiled"],
     cpu=4,
     memory="16 GiB",
     files=["fugue-sql-demo.ipynb"],
