@@ -1,11 +1,14 @@
 import dask.dataframe as dd
 from distributed import wait
 from dask_ml.model_selection import train_test_split
-from dask_ml.xgboost import XGBRegressor
-from dask_ml.metrics import mean_absolute_error
+# from dask_ml.linear_model import LinearRegression
+# from dask_ml.metrics import mean_absolute_error
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error
 
 from prefect import Flow, task
 import prefect
+import joblib
 
 @task(name="Load Data")
 def load_data():
@@ -29,19 +32,16 @@ def create_features(df: dd.DataFrame) -> dd.DataFrame:
     df = df.drop("tpep_pickup_datetime", axis=1)
     return df
 
-@task(name="Print Head")
-def print_head(df: dd.DataFrame) -> dd.DataFrame:
-    print(df.head())
-    return df
-
 @task(name="Train Model")
 def train_model(df: dd.DataFrame):
+    # This brings the DataFrame from Dask to Pandas
+    df = df.compute()
+
     train, test = train_test_split(df, test_size = 0.2)
 
-    est = XGBRegressor(params = {'objective': 'reg:squarederror',
-          'max_depth': 4, 'eta': 0.01, 'min_child_weight': 0.5})
+    est = LinearRegression()
     est.fit(train.drop('tip_amount', axis=1), train['tip_amount'])
-    
+
     y_test = test['tip_amount']
     y_pred = est.predict(test.drop('tip_amount', axis = 1))
     metric = mean_absolute_error(y_test, y_pred)
@@ -49,9 +49,12 @@ def train_model(df: dd.DataFrame):
     logger = prefect.context.get("logger")
     logger.info(f"The mean absolute error is: {metric}")
 
+    return est
+
+@task(name="Save Model")
+def save_model(est):
+    joblib.dumps(est, "/tmp/model.pkl")
     return
-
-
 
 with Flow("ml-flow") as flow:
     df = load_data()
