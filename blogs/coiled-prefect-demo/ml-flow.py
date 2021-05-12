@@ -62,3 +62,4 @@ with Flow("ml-flow") as flow:
     train_model(df)
 
 flow.run()
+flow.exectuor = LocalDaskExecutor()
