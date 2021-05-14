@@ -2,14 +2,14 @@ import prefect
 from prefect import task, Flow
 from prefect.run_configs import LocalRun
 from prefect.executors import DaskExecutor
-from prefect.storage import Github
+from prefect.storage.github import GitHub
 
 # RUN_CONFIG = ECSRun(labels=["simple-ecs"], execution_role_arn="arn:aws:iam::304383062342:role/ecsTaskExecutionRole")
 RUN_CONFIG = LocalRun()
 
 EXECUTOR = DaskExecutor(cluster_class="dask_cloudprovider.aws.FargateCluster",
                         cluster_kwargs={'n_workers': 1, 'region_name':'us-east-2'})
-STORAGE = Github(repo="kvnkho/demos", flow_path='prefect/fargate_test.py', repo_host="github.com")
+STORAGE = GitHub(repo="kvnkho/demos", path='prefect/fargate_test.py')
 
 @task
 def print_log():
