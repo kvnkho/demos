@@ -5,10 +5,10 @@ from prefect.executors import DaskExecutor
 from prefect.storage.github import GitHub
 
 # RUN_CONFIG = ECSRun(labels=["simple-ecs"], execution_role_arn="arn:aws:iam::304383062342:role/ecsTaskExecutionRole")
-RUN_CONFIG = LocalRun()
+RUN_CONFIG = LocalRun(env= {'PREFECT__LOGGING__LEVEL': 'DEBUG'})
 
 EXECUTOR = DaskExecutor(cluster_class="dask_cloudprovider.aws.FargateCluster",
-                        cluster_kwargs={'n_workers': 1, 'region_name':'us-east-2'})
+                        cluster_kwargs={'image':'prefecthq/prefect:0.14.17-python3.7','n_workers': 1, 'region_name':'us-east-2'})
 STORAGE = GitHub(repo="kvnkho/demos", path='prefect/fargate_test.py')
 
 @task
