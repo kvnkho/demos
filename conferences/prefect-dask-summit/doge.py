@@ -1,12 +1,15 @@
 import requests as re
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Callable
-import seaborn as sns
+import time
 
 def format_url(coin="DOGE"):
     url = "https://production.api.coindesk.com/v2/price/values/"
-    params = "?start_date=2021-05-18T15:40&end_date=2021-05-19T03:40&ohlc=false"
+    end_time = datetime.now()
+    start_time = (end_time - timedelta(minutes=10)).isoformat(timespec="minutes")
+    end_time = end_time.isoformat(timespec="minutes")
+    params = f"?start_date={start_time}&end_date={end_time}&ohlc=false"
     return url + coin + params
 
 def get_data(coin="DOGE") -> pd.DataFrame:
@@ -15,11 +18,21 @@ def get_data(coin="DOGE") -> pd.DataFrame:
     data = pd.DataFrame(prices, columns=["time", "price"])
     return data
 
-def detect_dip(data):
-    pct_change = data['price'].max() - data['price'].min()
-    return True
+def detect_dip(data, threshold = 10):
+    peak = data['price'].max()
+    bottom = data['price'].min()
+    dip = 100 - (bottom/peak)*100
+    if dip > threshold:
+        return True
+    else:
+        return False
 
 def post_to_slack():
+    pass
 
-data = get_data()
-print(data.head())
+while True:
+    time.sleep(60)
+    data = get_data()
+    is_dip = detect_dip(data)
+    if is_dip:
+        post_to_slack()
