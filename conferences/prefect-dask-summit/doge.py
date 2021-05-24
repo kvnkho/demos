@@ -4,15 +4,14 @@ from datetime import datetime, timedelta
 from typing import Callable
 import time
 
-def format_url(coin="DOGE"):
+def format_url(coin: str="DOGE") -> str:
     url = "https://production.api.coindesk.com/v2/price/values/"
-    end_time = datetime.now()
-    start_time = (end_time - timedelta(minutes=10)).isoformat(timespec="minutes")
-    end_time = end_time.isoformat(timespec="minutes")
+    start_time = (datetime.now() - timedelta(minutes=10)).isoformat(timespec="minutes")
+    end_time = datetime.now().isoformat(timespec="minutes")
     params = f"?start_date={start_time}&end_date={end_time}&ohlc=false"
     return url + coin + params
 
-def get_data(coin="DOGE") -> pd.DataFrame:
+def get_data(coin: str="DOGE") -> pd.DataFrame:
     prices = re.get(format_url(coin))
     prices = prices.json()['data']['entries']
     data = pd.DataFrame(prices, columns=["time", "price"])
@@ -31,7 +30,7 @@ def post_to_slack():
     pass
 
 while True:
-    time.sleep(60)
+    time.sleep(300)
     data = get_data()
     is_dip = detect_dip(data)
     if is_dip:
