@@ -43,3 +43,15 @@ with Flow("schedule flow") as schedule_flow:
     date_param = Parameter("dates", default=[1,2,3,4,5])
     loop_over_dates(date_param)
 schedule_flow.register("aws")
+
+
+   def run(self, run_names, gpudb_user, gpudb_pass, gpudb_host, collections_list):
+        logger.info("Start Rename Runner")
+
+        iterations = len(run_names)
+        RenameTask(name="push1_post").run(gpudb_user, gpudb_pass, gpudb_host[0], collections_list)
+
+        for i in range(1, iterations):
+            RenameTask(name=f"push{i + 1}_post").run(gpudb_user, gpudb_pass, gpudb_host[i], collections_list)
+        logger.info("Finish Rename Runner")
+        return all_tasks
