@@ -7,6 +7,7 @@ from prefect.tasks.control_flow.case import case
 from prefect import task, Flow, Parameter, unmapped
 from prefect.tasks.notifications import SlackTask
 from prefect.executors import DaskExecutor
+from prefect.run_configs.kubernetes import KubernetesRun
 
 
 def format_url(coin="DOGE"):
@@ -44,6 +45,27 @@ with Flow("to-the-moon") as flow:
     dip = task(lambda x: max(x))(is_dip)
     with case(dip, True):
         post_to_slack()
+
+import warnings
+class KubernetesRunConfig(KubernetesRun):
+    """A KubernetesRun class that gives some warnings for some common prefect config 'gotchas'"""
+    def __init__(self, *args, **kwargs):
+    #     if "image_pull_policy" not in kwargs:
+    #         # this is the k8s default anyway, but its nice to be explicit so you can see it in the UI
+    #         kwargs.update(image_pull_policy="IfNotPresent")
+        # if "labels" not in kwargs or not any(label.startswith("k8s-") for label in kwargs["labels"]):
+        #     warnings.warn(
+        #         "Registering config with no k8s agent label.  "
+        #         "Your label must match the agent you want to run on or your flow will never start!"
+        #     )
+        # if "image" not in kwargs:
+        #     warnings.warn(
+        #         "No image passed.  Is this intentional?  "
+        #         "If you don't pass an image the flow run will use the base prefect image."
+        #     )
+        super().__init__(*args, **kwargs)
+
+flow.run_config = KubernetesRunConfig(env={"SOME_VAR": "value"})
 
 # # Create a software environment for our workers
 # coiled.create_software_environment(

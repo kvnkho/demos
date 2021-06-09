@@ -62,12 +62,14 @@ def detect_dip(df: pd.DataFrame, threshold, coin_name):
     df = df[['price', 'set']]
     df = pd.concat([df, df2], axis=0, ignore_index=True)
     
+    plt.figure()
     sns.lineplot(list(range(0,len(df['price']))), df['price'], hue=df['set'])
+    plt.title(f"{coin_name} Forecast")
     buffer = io.BytesIO()
     plt.savefig(buffer, format='png',bbox_inches='tight')
     buffer.seek(0)
 
-    my_result = S3Result(bucket="omlds-prefect", location="{flow_run_name}/{coin_name}/forecast.png", serializer=NoOpSerializer())
+    my_result = S3Result(bucket="omlds-prefect", location="{flow_run_name}/" + coin_name + "/forecast.png", serializer=NoOpSerializer())
     res = my_result.write(buffer.getvalue(), **prefect.context)
     
     prefect.artifacts.create_markdown(MARKDOWN.format(coin_name=coin_name, summary=summary,
@@ -86,13 +88,13 @@ with Flow("to-the-moon-with-ARIMA") as flow:
     with case(dip, True):
         post_to_slack()
 
-# Create a software environment for our workers
-coiled.create_software_environment(
-    name="prefect",
-    conda={"channels": ["conda-forge"],
-            "dependencies": ["python=3.8.0", "dask=2021.04.0", "distributed=2021.04.0", "prefect", "seaborn", "boto3"]},
-    pip={''}
-    )
+# # Create a software environment for our workers
+# coiled.create_software_environment(
+#     name="prefect",
+#     conda={"channels": ["conda-forge"],
+#             "dependencies": ["python=3.8.0", "dask=2021.04.0", "distributed=2021.04.0", "prefect", "seaborn", "boto3"]},
+#     pip={''}
+#     )
 
 executor = DaskExecutor(
     cluster_class=coiled.Cluster,
