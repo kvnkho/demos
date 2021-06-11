@@ -14,4 +14,4 @@ repo="kvnkho/demos",
 flow_path="prefect/git_storage.py",
 repo_host="github.com")
 
-flow.register("git_storage")
+flow.register("omlds")
