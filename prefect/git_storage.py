@@ -11,6 +11,7 @@ with Flow("gh storage") as flow:
 
 flow.storage = GitHub(
 repo="kvnkho/demos", 
-path="git_storage.py",)
+path="git_storage.py",
+ref="main")
 
 flow.register("omlds")
