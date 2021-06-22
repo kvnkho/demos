@@ -1,6 +1,6 @@
 from prefect import Flow, task
 import prefect
-from prefect.storage.github import Github
+from prefect.storage.github import GitHub
 
 @task
 def abc():
@@ -9,8 +9,8 @@ def abc():
 with Flow("gh storage") as flow:
     abc()
 
-flow.storage = Github(
+flow.storage = GitHub(
 repo="kvnkho/demos", 
-flow_path="git_storage.py",)
+path="git_storage.py",)
 
-flow.register("git_storage")
+flow.register("omlds")
