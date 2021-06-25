@@ -106,4 +106,4 @@ executor = DaskExecutor(
 )
 flow.executor = executor
 
-flow.register("omlds")
+flow.register("budapest")
