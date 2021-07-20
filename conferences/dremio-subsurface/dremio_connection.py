@@ -125,4 +125,4 @@ if __name__ == "__main__":
     """
 
     connect_to_dremio_flight_server_endpoint(hostname="3.238.152.255", flightport=32010, username="kvnkho",
-      password="Prefect123", sqlquery=query, tls=None, certs=None)
+      password="", sqlquery=query, tls=None, certs=None)
