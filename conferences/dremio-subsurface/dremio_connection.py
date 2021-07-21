@@ -121,7 +121,7 @@ def connect_to_dremio_flight_server_endpoint(hostname, flightport, username, pas
 if __name__ == "__main__":
     # Connect to Dremio Arrow Flight server endpoint.
     query = """
-        SELECT * FROM "Demo NYC Taxi"."Demo Taxi Reflection" LIMIT 10
+        SELECT vendor_id, passenger_count, pickup_date, dropoff_date FROM "Demo NYC Taxi"."Demo Taxi Reflection" LIMIT 10
     """
 
     connect_to_dremio_flight_server_endpoint(hostname="3.238.152.255", flightport=32010, username="kvnkho",
