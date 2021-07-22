@@ -5,9 +5,6 @@ import prefect
 from prefect.executors import DaskExecutor
 from prefect.storage import GitHub
 
-print(torch.cuda.is_available())
-print(torch.cuda.device_count())
-
 @task
 def abc(x):
     logger = prefect.context.get("logger")
@@ -15,6 +12,9 @@ def abc(x):
     logger.info(torch.cuda.device_count())
     logger.info(f"Map index {x}")
     return x
+
+with Flow("gpu-test") as flow:
+    abc.map([1,2,3,4])
 
 coiled.create_software_environment(
     name="gpu-env4",
@@ -50,9 +50,6 @@ executor = DaskExecutor(
     },
 )
 
-with Flow("gpu-test") as flow:
-    abc.map([1,2,3,4])
-
 flow.executor = executor
-flow.storage = GitHub(repo="kvnkho/demos", path="prefect/coiled.gpu")
+flow.storage = GitHub(repo="kvnkho/demos", path="/prefect/coiled_gpu.py", ref="main")
 flow.register("dremio")
