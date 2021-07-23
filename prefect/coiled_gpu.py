@@ -47,6 +47,7 @@ executor = DaskExecutor(
         "name": "prefect-executor",
         "worker_memory": "4 GiB",
         "worker_gpu": 1,
+        "backend_options":{"spot": False}
     },
 )
 
