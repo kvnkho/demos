@@ -4,4 +4,4 @@ Demo for using Module storage with Prefect
 
 2. Register the flows with `prefect register --project proj_name -p mymodule/flows/`. This should register 2 flows.
 
-3. Make sure the agent as `mymodule` installed. You can then run flow1 or flow2 and it will import it from the module.ß
+3. Make sure the agent as `mymodule` installed. You can then run flow1 or flow2 and it will import it from the module upon flow execution.
