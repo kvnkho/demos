@@ -48,6 +48,7 @@ def train_model(df, model):
     df['lag1'] = df["price"].shift(1)
     df['lag2'] = df["price"].shift(2)
     df.fillna(0, inplace=True)
+
     model.fit(df.drop("price", axis=1), df["price"])
 
     error = mean_absolute_error(model.predict(df.drop("price", axis=1)), df["price"])
