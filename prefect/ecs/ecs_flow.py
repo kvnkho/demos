@@ -24,5 +24,5 @@ flow.run_config = RUN_CONFIG
 flow.register("dsdc")
 
 """
-prefect agent ecs start --cluster arn:aws:ecs:us-east-2:029864677731:cluster/test-cluster --label ecs_test_c --label ecs_test_d
+prefect agent ecs start --cluster arn:aws:ecs:us-east-2:12345678:cluster/test-cluster --label ecs_test_c --label ecs_test_d
 """
