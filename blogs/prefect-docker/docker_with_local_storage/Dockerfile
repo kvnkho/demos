@@ -4,4 +4,4 @@ WORKDIR /app
 
 ADD . .
 
-RUN pip install -e .
+RUN pip install .

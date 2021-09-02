@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
@@ -6,5 +6,6 @@ with open('requirements.txt') as f:
 setup(
     name="mypackage",
     version='0.1',
+    packages=find_packages(),
     install_requires=requirements
 )
