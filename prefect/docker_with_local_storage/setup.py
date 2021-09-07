@@ -1,6 +1,11 @@
-from setuptools import setup
+from setuptools import setup, find_packages
+
+with open('requirements.txt') as f:
+    requirements = f.read().splitlines()
 
 setup(
-    name="docker_example",
-    version='0.1'
+    name="mypackage",
+    version='0.1',
+    packages=find_packages(),
+    install_requires=requirements
 )
