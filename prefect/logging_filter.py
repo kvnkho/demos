@@ -7,7 +7,7 @@ import prefect
 # Creating a filter
 class SecureFilter(logging.Filter):
     def filter(self, rec):
-        if 'sec' in rec.msg:
+        if 'secs' in rec.msg:
             return 0
         return 1
 
@@ -16,10 +16,13 @@ def abc(x):
     time.sleep(x)
     return x
 
-logger = logging.getLogger("prefect.TaskRunner")
-logger.addFilter(SecureFilter())
+def get_logger():
+    logger = logging.getLogger("prefect.TaskRunner")
+    logger.addFilter(SecureFilter()) 
+    return logger
 
 with Flow("timer flow") as flow:
+    logger = get_logger()
     secs= Parameter("secs", 1)
     abc.map([secs]*5)
 
@@ -28,5 +31,5 @@ repo="kvnkho/demos",
 path="/prefect/logging_filter.py",
 ref="main")
 
-flow.register("dsdc")
-# flow.run()
+# flow.register("dsdc")
+flow.run()
