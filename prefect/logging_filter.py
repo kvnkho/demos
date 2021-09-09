@@ -16,7 +16,8 @@ def abc(x):
     time.sleep(x)
     return x
 
-
+logger = logging.getLogger("prefect.TaskRunner")
+logger.addFilter(SecureFilter())
 
 with Flow("timer flow") as flow:
     secs= Parameter("secs", 1)
@@ -26,9 +27,6 @@ flow.storage = GitHub(
 repo="kvnkho/demos", 
 path="/prefect/logging_filter.py",
 ref="main")
-
-logger = logging.getLogger("prefect.TaskRunner")
-logger.addFilter(SecureFilter())
 
 flow.register("dsdc")
 # flow.run()
