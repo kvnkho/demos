@@ -5,11 +5,12 @@ from prefect.storage.github import GitHub
 
 @task
 def abc(x):
-    time.sleep(5)
+    time.sleep(x)
     return x
 
 with Flow("timer flow") as flow:
-    abc.map([1]*10)
+    secs= Parameter("secs", 1)
+    abc.map([secs]*5)
 
 flow.storage = GitHub(
 repo="kvnkho/demos", 
