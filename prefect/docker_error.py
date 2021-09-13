@@ -8,11 +8,10 @@ from prefect.storage import GitHub
 def hello_task():
     logger = prefect.context.get("logger")
     logger.info("Hello world!")
-
-
+    
 with Flow(
         "hello-flow",
-        storage=GitHub(add_default_labels=False),
+        storage=GitHub(repo="kvnkho/demos", path="prefect/docker_error.py", add_default_labels=False),
         run_config=DockerRun(
             image="prefecthq/prefect:latest",
             labels=["docker"],
