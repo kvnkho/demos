@@ -7,7 +7,7 @@ from prefect.run_configs import DockerRun
 def abc():
     return 1
 
-with Flow("gh storage") as flow:
+with Flow("test-docker") as flow:
     abc()
 
 flow.storage = GitHub(
