@@ -5,7 +5,6 @@ from prefect.run_configs import DockerRun
 
 @task
 def abc():
-    sys.exit(0)
     return 1
 
 with Flow("test-docker") as flow:
