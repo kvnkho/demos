@@ -31,5 +31,5 @@ repo="kvnkho/demos",
 path="/prefect/logging_filter.py",
 ref="main")
 
-# flow.register("dsdc")
-flow.run()
+flow.register("dsdc")
+# flow.run()

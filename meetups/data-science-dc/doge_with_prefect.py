@@ -46,4 +46,5 @@ with Flow("to-the-moon") as flow:
     with case(is_dip, True):
         post_to_slack()
 
-flow.register("dsdc")
+flow.register("bristech")
+# flow.run()

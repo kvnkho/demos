@@ -2,37 +2,17 @@ import requests as re
 import pandas as pd
 from datetime import datetime, timedelta
 from prefect.tasks.control_flow.case import case
-import matplotlib.pyplot as plt
-import seaborn as sns
-import io
-import coiled 
+import coiled
 
 from prefect import task, Flow, Parameter, unmapped
 from prefect.tasks.notifications import SlackTask
 from prefect.executors import DaskExecutor
-import prefect
-from prefect.engine.results import S3Result
-from prefect.engine.serializers import Serializer
+from prefect.run_configs.kubernetes import KubernetesRun
 
-MARKDOWN = """# {coin_name}
-
-{summary}
-
-<img src=" https://coiled-prefect.s3.amazonaws.com/{image}">
-"""
-
-class NoOpSerializer(Serializer):
-    """A `Serializer` that does nothing."""
-
-    def serialize(self, value):
-        return value
-
-    def deserialize(self, value):
-        return value
 
 def format_url(coin="DOGE"):
     url = "https://production.api.coindesk.com/v2/price/values/"
-    start_time = (datetime.now() - timedelta(minutes=60)).isoformat(timespec="minutes")
+    start_time = (datetime.now() - timedelta(minutes=10)).isoformat(timespec="minutes")
     end_time = datetime.now().isoformat(timespec="minutes")
     params = f"?start_date={start_time}&end_date={end_time}&ohlc=false"
     return url + coin + params
@@ -45,44 +25,28 @@ def get_data(coin="DOGE") -> pd.DataFrame:
     return data
 
 @task
-def detect_dip(df: pd.DataFrame, threshold, coin_name):
-    from statsmodels.tsa.arima.model import ARIMA
-    model = ARIMA(df['price'], order=(2,2,1))
-    model_fit = model.fit()
-
-    # summary of fit model
-    summary = model_fit.summary()
-
-    # predictions
-    df['set'] = 'train'
-    df2 = pd.DataFrame({'price': model_fit.forecast(5)})
-    df2['set'] = 'forecast'
-    df = df[['price', 'set']]
-    df = pd.concat([df, df2], axis=0, ignore_index=True)
+def detect_dip(df: pd.DataFrame, threshold):
+    peak = df['price'].max()
+    bottom = df['price'].min()
+    dip = 100 - (bottom/peak)*100
     
-    plt.figure()
-    sns.lineplot(list(range(0,len(df['price']))), df['price'], hue=df['set'])
-    plt.title(f"{coin_name} Forecast")
-    buffer = io.BytesIO()
-    plt.savefig(buffer, format='png',bbox_inches='tight')
-    buffer.seek(0)
+    if dip > threshold:
+        return True
+    else:
+        return False
 
-    my_result = S3Result(bucket="coiled-prefect", location="{flow_run_name}/" + coin_name + "/forecast.png", serializer=NoOpSerializer())
-    res = my_result.write(buffer.getvalue(), **prefect.context)
-    
-    prefect.artifacts.create_markdown(MARKDOWN.format(coin_name=coin_name, summary=summary,
-        image=res.location))
-    
-    return True
+@task
+def reduce_dips(dips):
+    return max(dips)
 
 post_to_slack = SlackTask(message="There has been a dip in crypto price.", webhook_secret="SLACK_WEBHOOK_URL")
 
-with Flow("to-the-moon-with-coiled") as flow:
+with Flow("to-the-moon-mapping") as flow:
     coin = Parameter("coin", default=["DOGE", "BTC", "ETH"])
     threshold = Parameter("threshold", default=0)
     data = get_data.map(coin)
-    is_dip = detect_dip.map(data, unmapped(threshold), coin)
-    dip = task(lambda x: max(x))(is_dip)
+    is_dip = detect_dip.map(data, threshold=unmapped(threshold))
+    dip = reduce_dips(is_dip)
     with case(dip, True):
         post_to_slack()
 
@@ -96,4 +60,4 @@ executor = DaskExecutor(
 )
 flow.executor = executor
 
-flow.register("dsdc")
+flow.register("bristech")

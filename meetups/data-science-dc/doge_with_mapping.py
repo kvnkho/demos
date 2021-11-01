@@ -49,4 +49,4 @@ with Flow("to-the-moon-mapping") as flow:
     with case(dip, True):
         post_to_slack()
 
-flow.register("dsdc")
+flow.register("bristech")
