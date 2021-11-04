@@ -11,7 +11,8 @@ def abc():
 with Flow("host_config") as flow:
     abc()
 
-run_config = DockerRun(host_config=dict(mem_limit="128m"))
+run_config = DockerRun(host_config=dict(mem_limit=12345,
+                                        mem_reservation=1234))
 flow.run_config = run_config
 
 flow.storage = GitHub(
