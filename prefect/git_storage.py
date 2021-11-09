@@ -15,6 +15,4 @@ repo="kvnkho/demos",
 path="/prefect/git_storage.py",
 ref="main")
 
-flow.run_config = DockerRun(image="prefecthq/prefect")
-
 flow.register("omlds")
