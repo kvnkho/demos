@@ -7,6 +7,7 @@ def abc():
     return "hello"
 
 with Flow("ecs_test") as flow:
+    prefect.context.logger.info(dict(prefect.context))
     abc()
 
 RUN_CONFIG = ECSRun(task_definition_path="test.yaml", 
@@ -21,7 +22,7 @@ flow.storage=S3(bucket="coiled-prefect", add_default_labels=False)
 
 flow.run_config = RUN_CONFIG 
 
-flow.register("dsdc")
+flow.register("bristech")
 
 """
 prefect agent ecs start --cluster arn:aws:ecs:us-east-2:12345678:cluster/test-cluster --label ecs_test_c --label ecs_test_d
