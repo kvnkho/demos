@@ -7,7 +7,5 @@ def abc(x):
     prefect.context.logger.info(x)
     return x
 
-with Flow("module_test") as flow:
+with Flow("module_test") as flow1:
     abc(1)
-
-flow.storage=Module("mymodule.flows.flow1")
