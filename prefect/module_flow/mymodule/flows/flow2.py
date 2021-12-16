@@ -1,5 +1,6 @@
 from prefect import Flow, task
 from prefect.storage import Module
+import prefect
 
 @task
 def abc(x):
