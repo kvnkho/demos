@@ -3,6 +3,7 @@ from prefect.storage import Module
 
 @task
 def abc(x):
+    prefect.context.logger.info(x)
     return x
 
 with Flow("module_test2") as flow:
