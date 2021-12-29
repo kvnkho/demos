@@ -22,7 +22,7 @@ executor=DaskExecutor(
     debug=True,
 )
 flow.executor = executor
-flow.run_config = KubernetesRun()
+flow.run_config = KubernetesRun(env={"EXTRA_PIP_PACKAGES": "dask_kubernetes"})
 flow.storage = GitHub(repo="kvnkho/demos", path="prefect/dask_issues/benchmark.py")
 
 flow.register("dask_issue")
