@@ -27,7 +27,7 @@ def custom_terminal_state_handler(
 def do_nothing(n):
     pass
 
-items = list(range(8000))
+items = list(range(100000))
 
 with Flow("map_testing") as flow:
     do_nothing.map(items)
