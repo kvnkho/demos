@@ -17,7 +17,7 @@ with Flow("map_testing") as flow:
 executor=DaskExecutor(
     cluster_class="dask_kubernetes.KubeCluster",
     cluster_kwargs={
-        "num_workers": 2
+        "n_workers": 2
     },
     debug=True,
 )
