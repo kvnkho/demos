@@ -33,9 +33,9 @@ with Flow("map_testing") as flow:
     do_nothing.map(items)
     
 executor=DaskExecutor(
-        cluster_class=lambda: KubeCluster(make_pod_spec(image="prefecthq/prefect",
-        env={'EXTRA_PIP_PACKAGES': "bokeh"}, memory_request='4G', memory_limit='4G', threads_per_worker=4)),
-        cluster_kwargs={"n_workers": 5},
+        cluster_class=lambda: KubeCluster(pod_template=make_pod_spec(image="prefecthq/prefect",
+        env={'EXTRA_PIP_PACKAGES': "bokeh"}, memory_request='4G', memory_limit='4G', 
+        threads_per_worker=4), n_workers=5),
         debug=True,
         performance_report_path="performance_report.html",
         client_kwargs=dict(set_as_default=True)
