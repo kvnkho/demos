@@ -9,7 +9,7 @@ import prefect
 def do_nothing(n):
     pass
 
-listy = list(range(200000))
+listy = list(range(2000))
 
 with Flow("map_testing") as flow:
     
