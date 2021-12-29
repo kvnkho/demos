@@ -31,9 +31,10 @@ items = list(range(20))
 
 with Flow("map_testing") as flow:
     do_nothing.map(items)
-
+    
 executor=DaskExecutor(
-        cluster_class=lambda: KubeCluster(make_pod_spec(image=prefect.context.image)),
+        cluster_class=lambda: KubeCluster(make_pod_spec(image=prefect.context.image,
+        env={'EXTRA_PIP_PACKAGES': "bokeh"})),
         adapt_kwargs={"minimum": 2, "maximum": 2},
         debug=True,
         performance_report_path="performance_report.html",
