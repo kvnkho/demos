@@ -1,6 +1,8 @@
 from prefect import Flow, task
 from prefect.executors import DaskExecutor
 import dask_kubernetes
+from prefect.storage import GitHub
+from prefect.run_configs import KubernetesRun
 
 @task
 def do_nothing(n):
@@ -15,14 +17,8 @@ with Flow("map_testing") as flow:
 executor=DaskExecutor(
     cluster_class="dask_kubernetes.KubeCluster",
     cluster_kwargs={
-        "pod_template": make_pod_spec(
-            memory_request="1Gi",
-            memory_limit="2Gi",
-            image="gcr.io/radiant-labs-pipeline-v5/prefect-base:3.8",
-            threads_per_worker=2,
-        ),
+        "num_workers": 2
     },
-    adapt_kwargs=dict(minimum=2, maximum=2),
     debug=True,
 )
 flow.executor = executor
