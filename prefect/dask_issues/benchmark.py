@@ -36,7 +36,8 @@ executor=DaskExecutor(
         cluster_class=lambda: KubeCluster(make_pod_spec(image=prefect.context.image)),
         adapt_kwargs={"minimum": 2, "maximum": 2},
         debug=True,
-        performance_report_path="performance_report.html"
+        performance_report_path="performance_report.html",
+        client_kwargs=dict(set_as_default=True)
     )
 flow.executor = executor
 flow.run_config = KubernetesRun(env={"EXTRA_PIP_PACKAGES": "dask_kubernetes boto3"})
