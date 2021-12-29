@@ -42,6 +42,6 @@ executor=DaskExecutor(
     )
 flow.executor = executor
 flow.run_config = KubernetesRun(env={"EXTRA_PIP_PACKAGES": "dask_kubernetes boto3 bokeh"})
-flow.storage = GitHub(repo="kvnkho/demos", path="prefect/dask_issues/benchmark.py")
+flow.storage = GitHub(repo="kvnkho/demos", path="prefect/dask_issues/benchmark.py", secrets=["AWS_CREDENTIALS"])
 flow.terminal_state_handler = custom_terminal_state_handler
 flow.register("dask_issue")
