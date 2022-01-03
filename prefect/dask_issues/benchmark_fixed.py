@@ -9,6 +9,7 @@ from typing import Set, Optional
 import io
 from prefect.utilities.aws import get_boto_client
 import prefect
+import time
 
 def custom_terminal_state_handler(
     flow: Flow,
@@ -25,6 +26,7 @@ def custom_terminal_state_handler(
 
 @task
 def do_nothing(n):
+    time.sleep(0.25)
     pass
 
 items = list(range(50000))
