@@ -30,10 +30,15 @@ def create_data():
 
 @task
 def get_models():
-    return [LogisticRegression(random_state=42),
-            KNeighborsClassifier(), DecisionTreeClassifier(), SVC(), 
-            RandomForestClassifier(n_estimators=200, max_depth=4, random_state=42),
-            RandomForestClassifier(n_estimators=100, max_depth=3, random_state=42)]
+    space1 = Space(model=LogisticRegression, solver="lbfgs", C=Grid(10,20), penalty=Grid("l2","none"))
+    space2 = Space(model=RandomForestClassifier, max_samples=Rand(0.8,1), max_depth=RandInt(3,4)).sample(4)
+    space = [x.simple_value for x in list(space1+space2)]
+
+    for model_params in space:
+        model = model_params.pop("model")
+        models.append(model(**model_params))
+        
+    return models
 
 @task
 def train_model(model: Any, X_train, X_test, y_train, y_test):
