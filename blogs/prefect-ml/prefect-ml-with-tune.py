@@ -1,7 +1,6 @@
 from prefect import Flow, task, unmapped
 from typing import Any
 from prefect.executors import LocalDaskExecutor
-from pycaret.datasets import get_data
 import pandas as pd
 from prefect.backend.artifacts import create_markdown_artifact
 from sklearn.model_selection import train_test_split
@@ -17,7 +16,7 @@ from tune import Space, Grid, RandInt, Rand
 
 @task(nout=4)
 def create_data():
-    df = get_data("titanic")
+    df = pd.read_csv("titanic.csv")
     df = df.drop(["Name", "PassengerId", "Ticket", "Cabin"], axis = 1)
     df["Sex"] = pd.factorize(df["Sex"])[0]
     dummy = pd.get_dummies(df['Embarked'], prefix='Cabin')
