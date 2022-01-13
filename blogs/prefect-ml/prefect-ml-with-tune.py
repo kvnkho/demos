@@ -35,11 +35,10 @@ def get_models():
     space1 = Space(model=LogisticRegression, solver="lbfgs", C=Grid(10,20), penalty=Grid("l2","none"))
     space2 = Space(model=RandomForestClassifier, max_samples=Rand(0.8,1), max_depth=RandInt(3,4)).sample(4)
     space = [x.simple_value for x in list(space1+space2)]
-
+    models = []
     for model_params in space:
         model = model_params.pop("model")
         models.append(model(**model_params))
-        
     return models
 
 @task
