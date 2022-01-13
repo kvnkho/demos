@@ -13,6 +13,8 @@ from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 
+from tune import Space, Grid, RandInt, Rand
+
 @task(nout=4)
 def create_data():
     df = get_data("titanic")
