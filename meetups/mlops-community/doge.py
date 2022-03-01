@@ -40,6 +40,9 @@ def check_dip(coin="DOGE", threshold: float=0):
     data = get_data(coin)
     dip = detect_dip(data, threshold)
     if dip == True:
-        send_to_slack(f"{coin} has a dip")
+        print(f"{coin} has a dip")
 
-check_dip()
+while True:
+    import time
+    time.sleep(300)
+    check_dip()

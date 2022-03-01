@@ -55,11 +55,11 @@ def prediction_flow(threshold_drift: int = 2):
     baseline, new_data = load_data().wait().result()
     metric = check_drift(baseline, new_data).wait().result()
     if metric["data_drift"]["data"]["metrics"]["n_drifted_features"] > threshold_drift:
-        send_to_slack("FEATURE DRIFT DETECTED")
+        print("FEATURE DRIFT DETECTED")
     else:
         model = load_best_model().wait().result()
         new_data["preds"] = model.predict(new_data.drop("cat", axis=1).fillna(1))
         new_data.to_parquet("preds.parquet")
 
 if __name__ == "__main__":
-    prediction_flow(threshold_drift = 4)
+    prediction_flow()

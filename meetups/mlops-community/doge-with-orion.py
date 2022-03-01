@@ -43,8 +43,9 @@ def send_to_slack(message: str):
 @flow(name="Check Dip", 
 task_runner=DaskTaskRunner(
     cluster_kwargs={"n_workers": 4, "threads_per_worker": 2}
-))
-def check_dip(coins=["DOGE", "BTC", "ETH"], threshold: float=0):
+)
+)
+def check_dip(coins=["DOGE","BTC","ETH"], threshold: float=0):
     for coin in coins:
         data = get_data(coin)
         dip = detect_dip(data, threshold)

@@ -1,11 +1,10 @@
 import requests as re
 import pandas as pd
 from datetime import datetime, timedelta
+import os
 
-from prefect import task, Flow, case, Parameter
-from prefect.tasks.notifications import SlackTask
-from prefect.schedules import clocks, Schedule
-
+from prefect import task, flow
+from prefect.task_runners import ConcurrentTaskRunner, DaskTaskRunner
 
 def format_url(coin) -> str:
    url = "https://production.api.coindesk.com/v2/price/values/"
@@ -14,7 +13,7 @@ def format_url(coin) -> str:
    params = f"?start_date={start_time}&end_date={end_time}&ohlc=false"
    return url + coin + params
 
-@task(max_retries=3, retry_delay=timedelta(seconds=10))
+@task(retries=3, retry_delay_seconds=10)
 def get_data(coin: str="DOGE"):
     prices = re.get(format_url(coin)).json()["data"]["entries"]
     data = pd.DataFrame(prices, columns=["time", "price"])
@@ -31,29 +30,21 @@ def detect_dip(data, threshold = 10):
     else:
         return False
 
-slack_task = SlackTask("Buy some DOGE now!")
+@task
+def send_to_slack(message: str):
+    r = re.post(
+        os.environ["SLACK_WEBHOOK_URL"],
+        json=message if isinstance(message, dict) else {"text": message},
+    )
+    r.raise_for_status()
+    return
 
-now = datetime.utcnow()
-clock1 = clocks.IntervalClock(start_date=now,
-               interval=timedelta(minutes=5),
-               parameter_defaults={"coin": "DOGE"})
+@flow(name="Check Dip")
+def check_dip(coins=["DOGE", "BTC", "ETH"], threshold: float=0):
+    for coin in coins:
+        data = get_data(coin)
+        dip = detect_dip(data, threshold)
+        if dip.wait().result() == True:
+            send_to_slack(f"{coin} has a dip")
 
-clock2 = clocks.IntervalClock(start_date=now,
-               interval=timedelta(minutes=5),
-               parameter_defaults={"coin": "BTC"})
-
-clock3 = clocks.IntervalClock(start_date=now,
-               interval=timedelta(minutes=5),
-               parameter_defaults={"coin": "ETH"})
-
-schedule = Schedule(clocks=[clock1, clock2, clock3])
-
-
-with Flow("flow_name", schedule=schedule) as flow:
-    coin = Parameter("coin", default="DOGE")
-    data = get_data(coin)
-    dip = detect_dip(data, 0)
-    with case(dip,True):
-        slack_task()
-
-flow.register("general_assembly")
+check_dip()
