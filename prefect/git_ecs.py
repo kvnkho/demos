@@ -34,9 +34,8 @@ RUN_CONFIG = ECSRun(
 @task
 def say_hi():
     logger = prefect.context.get("logger")
-    logger.info("Hi from Prefect %s from flow %s", prefect.__version__, FLOW_NAME)
+    logger.info("Hi from Prefect from flow")
     return
-
 
 with Flow("logging_test_ecs", run_config=RUN_CONFIG,) as flow:
     say_hi()
