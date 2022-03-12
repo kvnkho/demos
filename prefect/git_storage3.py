@@ -14,8 +14,7 @@ storage = GitHub(repo="kvnkho/demos",
 @task(log_stdout=True)
 def create_directory():
     text = f"..."
-    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-    local_path = os.path.join(ROOT_DIR, "data")
+    local_path = os.path.join("/app/data")
 
     Path(local_path).mkdir(parents=True, exist_ok=True)
     return text
