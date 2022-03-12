@@ -19,7 +19,12 @@ def create_directory():
     Path(local_path).mkdir(parents=True, exist_ok=True)
     return text
 
+@task(log_stdout=True)
+def create_directory2():
+    raise ValueError()
+
 with Flow(FLOW_NAME,storage=storage,run_config=DockerRun()) as flow:
     create_dir = create_directory()
+    create_directory2()
 
 flow.register(project_name="databricks")
