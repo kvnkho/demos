@@ -1,7 +1,7 @@
 from prefect import Flow, task
 import prefect
+from prefect.run_configs.kubernetes import KubernetesRun
 from prefect.storage.github import GitHub
-from prefect.run_configs import DockerRun
 
 @task
 def something():
@@ -16,5 +16,5 @@ flow.storage = GitHub(
                 path="/prefect/git_storage2.py",
                 ref="main")
 
-flow.run_config = DockerRun(image="myprefectregistry.azurecr.io/samples/prefect:latest")
-flow.register("general_assembly")
+flow.run_config = KubernetesRun(labels=["test"])
+flow.register("databricks")
