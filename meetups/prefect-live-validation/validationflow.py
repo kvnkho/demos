@@ -13,7 +13,7 @@ schema = pa.DataFrameSchema(
 
 @task
 def get_data():
-    return pd.read_parquet("new_data.parquet")
+    return pd.read_parquet("baseline.parquet")
 
 @task
 def validate_dataframe(df: pd.DataFrame):
@@ -30,7 +30,5 @@ def error_reporting():
 def validation_flow():
     df = get_data()
     val = validate_dataframe(df)
-    if isinstance(val.wait().result(), pa.errors.SchemaErrors):
-        error_reporting()
 
 validation_flow()

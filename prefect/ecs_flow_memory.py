@@ -1,7 +1,7 @@
 import prefect
 from prefect.storage import GitHub
 from prefect.run_configs import ECSRun
-from prefect import task, Flow
+from prefect import task, Flow, Parameter
 
 
 STORAGE = GitHub(
@@ -17,13 +17,14 @@ RUN_CONFIG = ECSRun(
 )
 
 @task(log_stdout=True)
-def hello_world():
+def hello_world(x):
     text = f"hello from Prefect version {prefect.__version__}"
     print(text)
-    return text
+    return x
 
 
 with Flow("ecs-memory-test", storage=STORAGE, run_config=RUN_CONFIG,) as flow:
-    hw = hello_world()
+    x = Parameter("x test", 3)
+    hw = hello_world(x)
 
 flow.register("general_assembly")
