@@ -10,7 +10,7 @@ def abc(x):
     print(x)
     return "hello"
 
-with Flow("ecs_test", run_config=DockerRun(), executor = LocalDaskExecutor(scheduler="threads")) as flow:
+with Flow("ecs_test", run_config=DockerRun(), executor = LocalDaskExecutor(scheduler="processes")) as flow:
     abc(1)
 
 flow.storage = GitHub(
