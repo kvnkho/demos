@@ -11,7 +11,7 @@ def abc(x):
     return "hello"
 
 with Flow("ecs_test", run_config=DockerRun(), executor = LocalDaskExecutor(scheduler="processes")) as flow:
-    abc.map(list(range(10)))
+    abc(1)
 
 flow.storage = GitHub(
 repo="kvnkho/demos", 
