@@ -7,7 +7,6 @@ def abc():
     return "hello"
 
 with Flow("ecs_test") as flow:
-    prefect.context.logger.info(dict(prefect.context))
     abc()
 
 RUN_CONFIG = ECSRun(task_definition_path="test.yaml", 
