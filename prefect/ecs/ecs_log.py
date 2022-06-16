@@ -12,6 +12,7 @@ def abc(x):
 
 with Flow("ecs_test", run_config=DockerRun(), executor = LocalDaskExecutor(scheduler="processes")) as flow:
     abc(1)
+    abc(2)
 
 flow.storage = GitHub(
 repo="kvnkho/demos", 
