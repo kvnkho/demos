@@ -5,6 +5,7 @@ from prefect.run_configs import DockerRun
 
 @task
 def abc():
+    raise PAUSE()
     return 1
 
 with Flow("tes") as flow:
