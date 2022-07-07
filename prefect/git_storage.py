@@ -15,4 +15,5 @@ repo="kvnkho/demos",
 path="/prefect/git_storage.py",
 ref="main")
 
-flow.register("omlds")
+flow.run_config = DockerRun(image="prefecthq/prefect:latest")
+flow.register("databricks")
