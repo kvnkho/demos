@@ -2,6 +2,7 @@ from prefect import Flow, task
 import prefect
 from prefect.storage.github import GitHub
 from prefect.run_configs import DockerRun
+from prefect.engine.signals import PAUSE
 
 @task
 def abc():
