@@ -1,0 +1,1 @@
+{"timestamp": 1659208428.843919, "stored_source_code": "# declare a list tasks whose products you want to use as inputs\nupstream = None\n\nimport pandas as pd\nupstream = None\nproduct = None\ndf = pd.DataFrame({\"col1\": [1,2,3], \"col2\":[2,3,4]})\ndf.to_csv(\"data/raw.csv\", index=False)", "params": {}}

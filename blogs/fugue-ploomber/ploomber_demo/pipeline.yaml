@@ -1,0 +1,13 @@
+# Content of pipeline.yaml
+tasks:
+  - source: extract.py
+    product:
+      # scripts generate executed notebooks as outputs
+      nb: output/extract.html
+      # you can define as many outputs as you want
+      data: data/raw.csv
+
+  - source: transform.py
+    product: 
+      nb: output/transform.html
+      data: data/transformed.csv
