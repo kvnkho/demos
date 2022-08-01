@@ -8,4 +8,4 @@ engine = None
 
 # -
 df = pd.DataFrame({"col1": [1,2,3], "col2":[2,3,4]})
-df.to_csv(product["data"], index=False)
+df.to_parquet(product["data"], index=False)
