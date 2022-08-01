@@ -17,4 +17,4 @@ df = transform(upstream["extract"]["data"],
                add_cols, 
                schema="*,col3:int",
                engine=engine,
-               save_path=product["data"],)
+               save_path=product["data"])
