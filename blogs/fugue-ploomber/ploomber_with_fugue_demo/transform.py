@@ -1,5 +1,6 @@
 import pandas as pd
 from fugue import transform 
+from sklearn.preprocessing import minmax_scale
 
 # + tags=["parameters"]
 # declare a list tasks whose products you want to use as inputs
@@ -8,12 +9,12 @@ product = None
 engine = None
 
 # -
-def add_cols(df: pd.DataFrame) -> pd.DataFrame:
-    df["col3"] = df["col1"] + df["col2"]
-    return df
+def normalize(df: pd.DataFrame) -> pd.DataFrame:
+    return df.assign(scaled=minmax_scale(df["col2"]))
 
-df = transform(upstream["extract"]["data"], 
-               add_cols, 
-               schema="*,col3:int",
-               engine=engine,
-               save_path=product["data"])
+transform(upstream["extract"]["data"], 
+          normalize, 
+          schema="*,scaled:float",
+          partition={"by":"col1"},
+          engine=engine,
+          save_path=product["data"])

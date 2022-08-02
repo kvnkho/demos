@@ -1,10 +1,13 @@
 import pandas as pd
 from fugue import transform 
+from sklearn.preprocessing import minmax_scale
 
-df = pd.DataFrame({"col1": [1,2,3], "col2":[2,3,4]})
+df = pd.DataFrame({"col1": ["A","A","A","B","B","B"], "col2":[1,2,3,4,5,6]})
 
-def add_cols(df: pd.DataFrame) -> pd.DataFrame:
-    df["col3"] = df["col1"] + df["col2"]
-    return df
+def normalize(df: pd.DataFrame) -> pd.DataFrame:
+    return df.assign(scaled=minmax_scale(df["col2"]))
 
-ddf = transform(df, add_cols, schema="*,col3:int", engine="dask")
+# run on Pandas
+pdf = transform(df.copy(), normalize, schema="*,scaled:float", partition={"by":"col1"})
+# run on Dask
+ddf = transform(df.copy(), normalize, schema="*,scaled:float", partition={"by":"col1"} ,engine="dask")
