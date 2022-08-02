@@ -1,4 +1,4 @@
-from fugue import FugueWorkflow
+from fugue import transform
 import pandas as pd
 
 # + tags=["parameters"]
@@ -8,11 +8,12 @@ product = None
 engine = None
 
 # -
+df = pd.read_parquet(upstream["extract"]["data"])
+
 def add_cols(df: pd.DataFrame) -> pd.DataFrame:
     df["col3"] = df["col1"] + df["col2"]
     return df
 
-with FugueWorkflow(engine) as dag:
-    df = dag.load(upstream["extract"]["data"])
-    df = df.transform(add_cols, schema="*, col3:int")
-    df.save(product["data"], mode="overwrite", single=True)
+add_cols(df)
+
+df.to_parquet(product["data"])

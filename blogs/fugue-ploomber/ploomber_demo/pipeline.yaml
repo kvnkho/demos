@@ -5,9 +5,9 @@ tasks:
       # scripts generate executed notebooks as outputs
       nb: output/extract.html
       # you can define as many outputs as you want
-      data: data/raw.csv
+      data: data/raw.parquet
 
   - source: transform.py
     product: 
       nb: output/transform.html
-      data: data/transformed.csv
+      data: data/transformed.parquet

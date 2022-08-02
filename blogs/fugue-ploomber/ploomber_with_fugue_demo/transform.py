@@ -8,7 +8,6 @@ product = None
 engine = None
 
 # -
-
 def add_cols(df: pd.DataFrame) -> pd.DataFrame:
     df["col3"] = df["col1"] + df["col2"]
     return df
