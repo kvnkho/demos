@@ -18,7 +18,7 @@ data = pd.DataFrame({"color": np.random.choice(colors, 10000),
                      "units": np.random.randint(100,500)})
 
 class MyLogic:
-    
+
     def __init__(self, data, engine): 
         self.data = data
         self.engine = engine
@@ -35,17 +35,16 @@ class MyLogic:
     def parallelize1(self):
         # increase shirt price based on color
         price_increase = {"red": 10, "blue": 0, "green": 5, "yellow": 10}
-        
-        def increase_price(df: pd.DataFrame) -> pd.DataFrame:
+        def increase_price(df: pd.DataFrame, increases:Dict) -> pd.DataFrame:
             # this is already partitioned
             color = df.iloc[0]['color']
-            df = df.assign(price=df['price'] + price_increase[color])
+            df = df.assign(price=df['price'] + increases[color])
             return df
-        
         self.data = transform(self.data, 
                               increase_price, 
                               schema="*", 
-                              partition={"by": "color"}, 
+                              partition={"by": "color"},
+                              params={"increases": price_increase},
                               engine=self.engine)
         return self
 
@@ -55,9 +54,9 @@ class MyLogic:
             return df.assign(value=df["price"]*df["units"])
         self.data = transform(self.data, calculate_value, schema="*,value:int", engine=self.engine)
         return self
-    
+
 # Test on Pandas
-MyLogic(data, engine=None).preprocess1().parallelize1().postprocess1().data.head()
+print(MyLogic(data, engine=None).preprocess1().parallelize1().postprocess1().data.head())
 
 # Bring to Spark (change head to show)
 sdf = spark.createDataFrame(data)
