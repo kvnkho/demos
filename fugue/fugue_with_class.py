@@ -13,9 +13,9 @@ size = ["S", "M", "L", "XL"]
 # treat this dataframe like shirts
 data = pd.DataFrame({"color": np.random.choice(colors, 10000),
                      "size": np.random.choice(size, 10000),
-                     "design": np.random.choice(design, 10000),
-                     "price": np.random.randint(50,100),
-                     "units": np.random.randint(100,500)})
+                     "design": np.random.choice(design,10000),
+                     "price": np.random.randint(50,100,10000),
+                     "units": np.random.randint(100,500,10000)})
 
 class MyLogic:
 
