@@ -12,13 +12,6 @@ def output_two(df: pd.DataFrame) -> Iterable[Dict[str,Any]]:
 
     yield {"metrics": pickle.dumps(metrics), "predictions": pickle.dumps(preds)}
 
-# Model on whole dataset
-res = transform(test, output_two, schema="metrics:binary,predictions:binary")
-print(res.head())
-
-metrics = pickle.loads(res.iloc[0]["metrics"])
-print(metrics.head())
-
 # Model for each group
 res = transform(test, output_two, schema="metrics:binary,predictions:binary", partition={"by": "a"})
 print(res.head())
