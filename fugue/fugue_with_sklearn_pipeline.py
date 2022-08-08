@@ -73,10 +73,13 @@ out = transform(data,
 print(out.head())
 
 # Run on Spark
-out = transform(data, 
+spark = SparkSession.builder.getOrCreate()
+sdf = spark.createDataFrame(data)
+
+out = transform(sdf, 
                 apply_pipeline, 
                 schema="*-design-units+y:int",
                 params={"pipeline": pipeline},
                 partition={"by": "color"},
-                engine="spark")
+                engine=spark)
 out.show()
