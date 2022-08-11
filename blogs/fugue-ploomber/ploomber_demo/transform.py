@@ -1,13 +1,13 @@
 import pandas as pd
 from sklearn.preprocessing import minmax_scale
 
-# + tags=["parameters"]
+# %% tags=["parameters"]
 # declare a list tasks whose products you want to use as inputs
 upstream = ["extract"]
 product = None
 engine = None
 
-# -
+# %%
 def normalize(df: pd.DataFrame) -> pd.DataFrame:
     return df.assign(scaled=minmax_scale(df["col2"]))
 
