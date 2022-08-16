@@ -18,3 +18,8 @@ transform(upstream["extract"]["data"],
           partition={"by":"col1"},
           engine=engine,
           save_path=product["data"])
+
+
+ddf = dd.from_pandas(df, npartitions=2)
+ddf = transform(ddf, engine="dask")
+ddf = transform(ddf2, engine="dask")
